@@ -9,3 +9,8 @@
 -record(triangle, {a = 0, 
                    b = 0, 
                    c = 0}).
+
+-record(binary_tree, {value = 0,
+                      left_child = 0,
+                      right_child = 0}).
+-record(leave, {value = 0}).
