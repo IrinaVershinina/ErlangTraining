@@ -1,0 +1,5 @@
+The order of the keys now is determined 
+by the ordering on the hash values of the
+keys, and not by the order on the 
+keys themselves or by the order in which 
+the values are inserted into the table.
