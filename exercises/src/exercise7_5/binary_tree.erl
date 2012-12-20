@@ -14,8 +14,8 @@
 
 sum(Tree) when is_record(Tree, binary_tree) ->
     get_sum(Tree, 0);
-sum(Tree) when is_record(Tree, leave) ->
-    #leave{value = Val} = Tree,
+sum(Tree) when is_record(Tree, leaf) ->
+    #leaf{value = Val} = Tree,
     Val;
 sum(_Tree) ->
     {error, not_a_binary_tree}.
@@ -26,8 +26,8 @@ max_val(Tree) when is_record(Tree, binary_tree) ->
         {duplicated, _Val} -> {ok, there_is_no_maximum_value};
         Error -> Error
     end;
-max_val(Tree) when is_record(Tree, leave) ->
-    #leave{value = Val} = Tree,
+max_val(Tree) when is_record(Tree, leaf) ->
+    #leaf{value = Val} = Tree,
     Val;
 max_val(_Tree) ->
     {error, not_a_binary_tree}.
@@ -37,7 +37,7 @@ is_binary_tree_ordered(Tree) when is_record(Tree, binary_tree) ->
         {true, _, _} -> {ok, true};
         {false, _, _} -> {ok, false}
     end;
-is_binary_tree_ordered(Tree) when is_record(Tree, leave) ->
+is_binary_tree_ordered(Tree) when is_record(Tree, leaf) ->
     {ok, true};
 is_binary_tree_ordered(_Tree) ->
     {error, not_a_binary_tree}.
@@ -49,11 +49,11 @@ insert_value_to_ordered_tree(Tree, InsertVal) when is_record(Tree, binary_tree) 
             {ok, insert_value(Tree, InsertVal)};
         Error -> Error
     end;
-insert_value_to_ordered_tree(Tree, InsertVal) when is_record(Tree, leave) ->
-    #leave{value = Val} = Tree,
+insert_value_to_ordered_tree(Tree, InsertVal) when is_record(Tree, leaf) ->
+    #leaf{value = Val} = Tree,
     if
-        InsertVal > Val -> {ok, #binary_tree{value = Val, right_child = #leave{value = InsertVal}}};
-        InsertVal =< Val -> {ok, #binary_tree{value = Val, left_child = #leave{value = InsertVal}}}
+        InsertVal > Val -> {ok, #binary_tree{value = Val, right_child = #leaf{value = InsertVal}}};
+        InsertVal =< Val -> {ok, #binary_tree{value = Val, left_child = #leaf{value = InsertVal}}}
     end;
 insert_value_to_ordered_tree(_Tree, _InsertVal) ->
     {error, not_a_binary_tree}.    
@@ -62,14 +62,14 @@ insert_value_to_ordered_tree(_Tree, _InsertVal) ->
 %% ====================================================================
 get_sum(#binary_tree{value = Val, left_child = LeftChild, right_child = RightChild}, _Sum) ->
     Val + get_sum(LeftChild, _Sum) + get_sum(RightChild, _Sum);
-get_sum(#leave{value = Val}, _Sum) ->
+get_sum(#leaf{value = Val}, _Sum) ->
     Val;
 get_sum(0, _Sum) ->
     0.
 
 find_max_val(#binary_tree{value = Val, left_child = LeftChild, right_child = RightChild}) ->
     maximum(maximum(find_max_val(LeftChild), find_max_val(RightChild)), {not_duplicated, Val});
-find_max_val(#leave{value = Val}) ->
+find_max_val(#leaf{value = Val}) ->
     {not_duplicated, Val};
 find_max_val(0) ->
     {not_duplicated, 0}.
@@ -104,7 +104,7 @@ verify_if_a_binary_tree_is_ordered(#binary_tree{value = Val, left_child = LeftCh
         true ->
             {true, MinLeftVal, MaxRightVal}
     end;
-verify_if_a_binary_tree_is_ordered(#leave{value = Val}) ->
+verify_if_a_binary_tree_is_ordered(#leaf{value = Val}) ->
     {true, Val, Val};
 verify_if_a_binary_tree_is_ordered(_Tree) ->
     {false, 0, ?INFINITY}.
@@ -114,22 +114,22 @@ insert_value(#binary_tree{value = Val, left_child = LeftChild, right_child = Rig
         InsertVal > Val ->
             case RightChild of
                 0 ->
-                    #binary_tree{value = Val, left_child = LeftChild, right_child = #leave{value = InsertVal}};
+                    #binary_tree{value = Val, left_child = LeftChild, right_child = #leaf{value = InsertVal}};
                 _ ->
                     #binary_tree{value = Val, left_child = LeftChild, right_child = insert_value(RightChild, InsertVal)}
             end;
         InsertVal =< Val ->
             case LeftChild of
                 0 ->
-                    #binary_tree{value = Val, left_child = #leave{value = InsertVal}, right_child = RightChild};
+                    #binary_tree{value = Val, left_child = #leaf{value = InsertVal}, right_child = RightChild};
                 _ ->
                     #binary_tree{value = Val, left_child = insert_value(LeftChild, InsertVal), right_child = RightChild}
             end
     end;
-insert_value(#leave{value = Val}, InsertVal) ->
+insert_value(#leaf{value = Val}, InsertVal) ->
     if
         InsertVal > Val ->
-            #binary_tree{value = Val, right_child = #leave{value = InsertVal}};
+            #binary_tree{value = Val, right_child = #leaf{value = InsertVal}};
         InsertVal =< Val ->
-            #binary_tree{value = Val, left_child = #leave{value = InsertVal}}
+            #binary_tree{value = Val, left_child = #leaf{value = InsertVal}}
     end.

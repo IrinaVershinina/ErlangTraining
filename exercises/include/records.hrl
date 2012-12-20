@@ -13,4 +13,4 @@
 -record(binary_tree, {value = 0,
                       left_child = 0,
                       right_child = 0}).
--record(leave, {value = 0}).
+-record(leaf, {value = 0}).
